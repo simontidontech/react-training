@@ -1,26 +1,12 @@
-import { useEffect, useState } from 'react'
-import axios from 'axios';
-import { baseUrl } from '../common/constants';
-import Books from './Books';
+import { useRecoilState } from 'recoil';
+import { searchState } from '../common/atoms';
 
 export default function SearchBar() {
-    const [value, setValue] = useState("");
-    const [books, setBooks] = useState([]);
-
-    useEffect(() => {
-        axios.get(baseUrl + `/books/${value}`)
-            .then(function (response) {
-                setBooks(Array.isArray(response.data) ? response.data : [response.data]);
-            })
-            .catch(() => {
-                setBooks([]);
-            })
-    }, [value])
+    const [searchString, setSearchString] = useRecoilState(searchState);
 
     return (
         <div>
-            <input value={value} onChange={(e) => setValue(e.target.value)} />
-            <Books books={books} />
+            <input value={searchString} onChange={(e) => setSearchString(e.target.value)} />
         </div>
     )
 }
